@@ -2,6 +2,17 @@
   "name": "nexbash-redesign-temp2",
   "version": "1.0.0",
   "private": true,
+  "description": "Standalone redesign of the NexBash marketing site. The original project is untouched.",
+  "homepage": "https://github.com/abdullah9558/nexbashTemplate2#readme",
+  "bugs": {
+    "url": "https://github.com/abdullah9558/nexbashTemplate2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdullah9558/nexbashTemplate2.git"
+  },
+  "license": "ISC",
+  "author": "",
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
