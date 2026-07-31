@@ -1,160 +1,88 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import SlideTrack from '@/components/SlideTrack';
-import { useDragSwipe } from '@/hooks/useDragSwipe';
-import { useAutoCycle } from '@/hooks/useAutoCycle';
+import { useEffect, useState } from 'react';
 
-export default function Industries({ industries }) {
-  const sectionRef = useRef(null);
+export default function Industries({ industries = [] }) {
   const [open, setOpen] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [dragging, setDragging] = useState(false);
-  const total = industries.length;
-
-  const { active: idx, setActive: setIdx, go } = useAutoCycle({
-    total,
-    interval: 4800,
-    paused: paused || open || dragging,
-    sectionRef,
-  });
+  const featured = industries.slice(0, 10);
 
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape') setOpen(false);
+    const onKey = (event) => {
+      if (event.key === 'Escape') setOpen(false);
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  useEffect(() => {
-    if (!open) return undefined;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-
-  const { dragProps, dragOffset, isDragging } = useDragSwipe({
-    onSwipe: go,
-    onDragStart: () => {
-      setDragging(true);
-      setPaused(true);
-    },
-    onDragEnd: () => {
-      setDragging(false);
-      setPaused(false);
-    },
-  });
-
   if (!industries.length) return null;
 
   return (
     <>
-      <section ref={sectionRef} className="section industries screen-section" id="industries">
-        <div className="screen-section-inner">
-          <div className="studios-header">
-            <div className="section-head">
-              <p className="eyebrow">Who we help</p>
-              <h2>Industries we serve</h2>
-              <p className="lede">
-                If your organization runs on complex data or critical operations, we likely already
-                work in your field. Drag to browse.
-              </p>
-            </div>
-            <button
-              type="button"
-              className="btn-view-all"
-              data-cursor="hover"
-              onClick={() => setOpen(true)}
-            >
-              View All
-              <span aria-hidden="true">→</span>
-            </button>
+      <section className="band screen industries-impact" id="help" data-reveal>
+        <header className="band-head row-head industries-impact-head">
+          <div>
+            <p className="kicker">Who we help</p>
+            <h2>Industries we serve</h2>
+            <p className="lede">
+              If your organization runs on complex data or critical operations, we likely already
+              work in your field.
+            </p>
           </div>
+        </header>
 
-          <SlideTrack
-            className={`ind-slider ${dragging || isDragging ? 'is-dragging' : ''}`}
-            active={idx}
-            dragOffset={dragOffset}
-            isDragging={isDragging}
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => {
-              if (!dragging) setPaused(false);
-            }}
-            {...dragProps}
-          >
-            {industries.map((ind) => (
-              <div key={ind.name} className="ind-stage slide-item" data-cursor="expand">
-                <div className="ind-visual">
-                  <img src={ind.image} alt="" draggable={false} />
-                </div>
-                <div className="ind-copy">
-                  <h3>{ind.name}</h3>
-                  <p>{ind.desc}</p>
-                  <p className="ind-drag-hint">Drag to explore</p>
-                </div>
+        <div className="industries-impact-grid reveal-child" style={{ '--i': 1 }}>
+          {featured.map((industry, index) => (
+            <article className="industries-impact-row" key={industry.name}>
+              <span
+                className="industries-impact-icon"
+                style={{ backgroundImage: `url('${industry.image}')` }}
+                aria-hidden="true"
+              />
+              <div>
+                <span className="industries-impact-number">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3>{industry.name}</h3>
               </div>
-            ))}
-          </SlideTrack>
+              <span className="industries-impact-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </article>
+          ))}
+        </div>
 
-          <div className="ind-thumbs">
-            {industries.map((ind, i) => (
-              <button
-                key={ind.name}
-                type="button"
-                className={`ind-thumb ${i === idx ? 'active' : ''}`}
-                data-cursor="hover"
-                onClick={() => setIdx(i)}
-                aria-label={ind.name}
-              >
-                <img src={ind.image} alt="" draggable={false} />
-              </button>
-            ))}
-          </div>
+        <div className="industries-impact-footer reveal-child" style={{ '--i': 2 }}>
+          <span>{industries.length} industries. One delivery standard.</span>
+          <button type="button" className="ghost" onClick={() => setOpen(true)}>
+            Explore all industries
+          </button>
         </div>
       </section>
 
       <div
-        className={`nb-modal${open ? ' open' : ''}`}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setOpen(false);
+        className={`ap-modal${open ? ' open' : ''}`}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) setOpen(false);
         }}
       >
-        <div className="nb-modal-card">
-          <button
-            className="modal-close"
-            type="button"
-            aria-label="Close"
-            onClick={() => setOpen(false)}
-          >
+        <div className="ap-modal-card" key={open ? 'industries-open' : 'industries'}>
+          <button type="button" className="modal-close" aria-label="Close" onClick={() => setOpen(false)}>
             ×
           </button>
           <h3>All Industries We Serve</h3>
-          <p className="nb-modal-lede">
-            Organizations across sectors rely on Nexbash for AI, geospatial, and software systems
-            built for complex operations.
+          <p className="lede">
+            Organizations across sectors rely on Nexbash for AI, geospatial, and software systems.
           </p>
-          <div className="nb-modal-grid industries-modal-grid">
-            {industries.map((ind) => (
-              <button
-                type="button"
-                className="nb-modal-item"
-                key={ind.name}
-                data-cursor="hover"
-                onClick={() => {
-                  setIdx(industries.findIndex((x) => x.name === ind.name));
-                  setOpen(false);
-                }}
-              >
+          <div className="ap-modal-grid">
+            {industries.map((industry) => (
+              <article className="ap-modal-item" key={industry.name}>
                 <div
-                  className="nb-modal-thumb"
-                  style={ind.image ? { backgroundImage: `url('${ind.image}')` } : undefined}
+                  className="ap-modal-thumb"
+                  style={industry.image ? { backgroundImage: `url('${industry.image}')` } : undefined}
                 />
-                <h4>{ind.name}</h4>
-                <p>{ind.desc}</p>
-              </button>
+                <h4>{industry.name}</h4>
+                <p>{industry.desc}</p>
+              </article>
             ))}
           </div>
         </div>

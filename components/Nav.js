@@ -1,151 +1,95 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useTheme } from '@/components/ThemeProvider';
+import { useEffect, useState } from 'react';
+import BrandLogo from '@/components/BrandLogo';
 
-const links = [
-  { href: '#studios', label: 'Studios' },
-  { href: '#packages', label: 'Packages' },
-  { href: '#process', label: 'Process' },
-  { href: '#work', label: 'Projects' },
-  { href: '#industries', label: 'Who We Help' },
-  { href: '#contact', label: 'Contact' },
+const menus = [
+  {
+    label: 'What We Do',
+    items: [
+      ['GIS Services', ['Web Mapping', 'GIS Automation', 'Geospatial Analysis', 'GIS Software Development']],
+      ['Custom Software', ['Frontend', 'Backend', 'Databases', 'API Development']],
+      ['Mobile Development', ['iOS Development', 'Android Development', 'Hybrid App Development']],
+      ['Offshore Teams', ['Dedicated Teams', 'Team Augmentation', 'Consultation', 'Software Development']],
+      ['Web Services', ['Websites', 'Web Applications', 'Frontend & Backend', 'Web GIS Development']],
+      ['UI & UX Design', ['Web Design', 'Branding', 'User Experience', 'Interface Design']],
+    ],
+  },
+  {
+    label: 'Who We Help',
+    items: [
+      ['Metaverse', ['Point Clouds', '3D Meshes', 'Virtual Reality', 'LiDAR']],
+      ['Agriculture', ['Precision Agriculture', 'Crop Simulation', 'Remote Sensing', 'Yield Forecasting']],
+      ['Telecommunication', ['FTTH', 'FTTX', 'Capacity Management', 'Demand Forecasting']],
+      ['Real Estate', ['3D Modeling', 'Land Records', 'Market Analysis', 'Property Platforms']],
+      ['Healthcare', ['EMR / EHR', 'Patient Portals', 'Data Analytics', 'Remote Diagnostics']],
+    ],
+  },
+  {
+    label: 'How We Deliver',
+    items: [
+      ['Discover', ['Requirements', 'Research', 'Product Strategy']],
+      ['Design', ['Architecture', 'UX Systems', 'Prototyping']],
+      ['Develop', ['Agile Delivery', 'Engineering', 'Quality Assurance']],
+      ['Deliver', ['Deployment', 'Integration', 'Maintenance & Support']],
+    ],
+  },
 ];
 
 export default function Nav() {
-  const navRef = useRef(null);
+  const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
-  const [preferWhite, setPreferWhite] = useState(true);
-  const { theme, toggleTheme } = useTheme();
-  const themeRef = useRef(theme);
-  themeRef.current = theme;
 
   useEffect(() => {
-    const el = navRef.current;
-    if (!el) return undefined;
-
-    let frame = 0;
-    let scrolled = false;
-    let onHero = true;
-
-    const syncLogo = (hero) => {
-      const white = themeRef.current === 'dark' || hero;
-      setPreferWhite((prev) => (prev === white ? prev : white));
-    };
-
-    const apply = (nextScrolled, nextOnHero) => {
-      if (nextScrolled !== scrolled) {
-        scrolled = nextScrolled;
-        el.classList.toggle('nav-scrolled', scrolled);
-      }
-      if (nextOnHero !== onHero) {
-        onHero = nextOnHero;
-        el.classList.toggle('nav-on-hero', onHero);
-        syncLogo(onHero);
-      }
-    };
-
-    const update = () => {
-      frame = 0;
-      const y = window.scrollY;
-      const nextScrolled = y > 48;
-      const nextOnHero = !nextScrolled && y < window.innerHeight * 0.5;
-      apply(nextScrolled, nextOnHero);
-    };
-
-    const onScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(update);
-    };
-
-    el.classList.add('nav-on-hero');
-    syncLogo(true);
-    update();
+    const onScroll = () => setSolid(window.scrollY > 40);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    const el = navRef.current;
-    const onHero = el?.classList.contains('nav-on-hero');
-    setPreferWhite(theme === 'dark' || !!onHero);
-  }, [theme]);
+  const closeNav = () => setOpen(false);
 
   return (
-    <header
-      ref={navRef}
-      className={`nav nav-on-hero ${theme === 'dark' ? 'nav-dark' : ''}`}
-    >
-      <div className="nav-inner">
-        <a href="#top" className="nav-brand" data-cursor="brand">
-          <img
-            src="/assets/nexbash-logo.png"
-            alt="NexBash"
-            className={`nav-logo nav-logo-color ${preferWhite ? 'is-hidden' : ''}`}
-          />
-          <img
-            src="/assets/nexbash-logo-white.png"
-            alt="NexBash"
-            className={`nav-logo nav-logo-white ${preferWhite ? '' : 'is-hidden'}`}
-          />
-        </a>
-
-        <nav className={`nav-links ${open ? 'open' : ''}`}>
-          {links.map((l) => (
-            <a key={l.href} href={l.href} data-cursor="link" onClick={() => setOpen(false)}>
-              {l.label}
-            </a>
-          ))}
-        </nav>
-
-        <button
-          type="button"
-          className="theme-toggle"
-          data-cursor="hover"
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          onClick={toggleTheme}
-        >
-          {theme === 'dark' ? (
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
-              <path
-                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-              <path
-                d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5Z"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-        </button>
-
-        <a href="#contact" className="nav-cta" data-cursor="cta">
-          Get Started
-        </a>
-
-        <button
-          className="nav-toggle"
-          aria-label="Menu"
-          data-cursor="hover"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span />
-          <span />
-        </button>
-      </div>
+    <header className={`topnav ${solid ? 'is-solid' : ''}`}>
+      <a href="#top" className="brand">
+        <BrandLogo src={solid ? '/assets/nexbash-logo.png' : '/assets/nexbash-logo-white.png'} />
+      </a>
+      <nav className={open ? 'open' : ''}>
+        {menus.map((menu) => (
+          <div className="nav-menu" key={menu.label}>
+            <span className="nav-menu-label">{menu.label}</span>
+            <div className="nav-dropdown">
+              {menu.items.map(([label, children]) => (
+                <div className="nav-submenu" key={label}>
+                  <a href={menu.label === 'What We Do' ? '#studios' : menu.label === 'Who We Help' ? '#help' : '#process'} onClick={closeNav}>
+                  <span>{label}</span>
+                  <span aria-hidden="true">-&gt;</span>
+                  </a>
+                  <div className="nav-submenu-panel">
+                    <strong>{label}</strong>
+                    {children.map((child) => <span key={child}>{child}</span>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <a href="#packages" onClick={closeNav}>Packages</a>
+        <a href="#contact" onClick={closeNav}>Contact</a>
+      </nav>
+      <a href="#contact" className="go">
+        Get Started
+      </a>
+      <button
+        type="button"
+        className="nav-burger"
+        aria-label="Menu"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span />
+        <span />
+      </button>
     </header>
   );
 }
