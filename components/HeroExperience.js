@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import HeroWorld from '@/components/HeroWorld';
 
 export default function HeroExperience() {
   const experienceRef = useRef(null);
@@ -71,11 +70,8 @@ export default function HeroExperience() {
         preload="auto"
         aria-hidden="true"
       >
-        <source src="/assets/earth-spin.mp4" type="video/mp4" />
+        <source src="/assets/hero-bg-video.mp4" type="video/mp4" />
       </video>
-      <div className="hero-experience-globe">
-        <HeroWorld />
-      </div>
     </div>
   );
 }
