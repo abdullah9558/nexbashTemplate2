@@ -5857,6 +5857,49 @@ body {
   }
 }
 
+/* Keep the Nexbash2 reference hero authoritative after legacy overrides. */
+.hero-main.hero-main-template {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.hero-copy.hero-copy-template {
+  width: min(100%, 58rem);
+  max-width: 58rem;
+  margin: 0;
+  transform: translateY(clamp(2.25rem, 6vh, 3.5rem));
+}
+
+.hero-copy-template .hero-text-template .hero-title {
+  max-width: 14ch;
+  font-size: clamp(3rem, 4.5vw, 4.7rem);
+  line-height: 1.02;
+}
+
+.hero-copy-template .hero-text-template .hero-sub {
+  max-width: 42ch;
+  font-size: clamp(1.15rem, 1.75vw, 1.7rem);
+}
+
+@media (max-width: 767px) {
+  .hero-main.hero-main-template {
+    align-items: flex-start;
+  }
+
+  .hero-copy.hero-copy-template {
+    margin-top: 0;
+    transform: translateY(4.25rem);
+  }
+
+  .hero-copy-template .hero-text-template .hero-title {
+    max-width: 12ch;
+    font-size: clamp(2.55rem, 12vw, 4rem);
+  }
+}
+
 /* Final large-screen overrides after legacy normalization rules. */
 @media (min-width: 1600px) {
   :root { --max: 1420px; }
@@ -5885,6 +5928,106 @@ body {
   .screen .shatter-glass { max-height: min(55vh, 940px); }
   .capability-console { min-height: 820px; }
   .long-detail-visual { height: min(760px, 48vh) !important; }
+}
+
+/* Nexbash2 hero copy follows the bold, editorial reference layout. */
+.hero-main-template {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: clamp(5rem, 11vh, 8rem);
+  padding-bottom: clamp(8rem, 17vh, 12rem);
+}
+
+.hero-copy-template {
+  width: min(100%, 72rem);
+  max-width: 72rem;
+  margin: 0;
+  color: #fff;
+  text-align: left;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.38);
+}
+
+.hero-text-template {
+  width: min(100%, 68rem);
+  margin: 0 0 clamp(1.6rem, 3vw, 2.5rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.hero-text-template .hero-title {
+  max-width: 18ch;
+  margin: 0 0 0.65rem;
+  color: #fff;
+  font-size: clamp(3rem, 5.2vw, 5.8rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.hero-text-template .hero-title .word-dance {
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+}
+
+.hero-text-template .hero-sub {
+  max-width: 38ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: clamp(1.25rem, 2.15vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.hero-copy-template .hero-row {
+  justify-content: flex-start;
+  gap: 0.9rem;
+}
+
+.hero-copy-template .hero-row .go,
+.hero-copy-template .hero-row .ghost {
+  min-height: 3.75rem;
+  padding: 0.95rem 1.75rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.hero-copy-template .hero-row .go {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+
+.hero-copy-template .hero-row .ghost {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.16);
+  color: #fff;
+}
+
+.hero-experience::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(2, 10, 18, 0.72) 0%, rgba(2, 10, 18, 0.38) 48%, rgba(2, 10, 18, 0.08) 78%);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .hero-main-template {
+    align-items: flex-end;
+    padding-top: 7rem;
+    padding-bottom: 10rem;
+  }
+
+  .hero-copy-template .hero-row {
+    flex-wrap: wrap;
+  }
 }
 
 /* Detailed popup-pages */

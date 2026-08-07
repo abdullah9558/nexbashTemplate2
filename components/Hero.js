@@ -1,6 +1,5 @@
 'use client';
 
-import BrandLogo from '@/components/BrandLogo';
 import HeroExperience from '@/components/HeroExperience';
 
 export default function Hero({ heroBar = [] }) {
@@ -8,14 +7,9 @@ export default function Hero({ heroBar = [] }) {
     <section className="hero screen" id="top">
       <HeroExperience />
 
-      <div className="hero-main">
-        <div className="hero-copy">
-          <BrandLogo className="hero-mark anim-fade logo-pulse" />
-          <p className="signal anim-fade">
-            Signal · Geospatial · Intelligence
-            <span className="signal-live" aria-hidden="true" />
-          </p>
-          <div className="hero-text-panel">
+      <div className="hero-main hero-main-template">
+        <div className="hero-copy hero-copy-template">
+          <div className="hero-text-template">
             <h1 className="anim-fade hero-title">
               Turning complex data into{' '}
               <span className="word-dance">operational advantage</span>
@@ -27,7 +21,7 @@ export default function Hero({ heroBar = [] }) {
           </div>
           <div className="hero-row anim-fade">
             <a href="#contact" className="go go-pulse">
-              Start a Project
+              Get in Touch
             </a>
             <a href="#projects" className="ghost">
               See Our Work
